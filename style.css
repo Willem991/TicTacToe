@@ -20,3 +20,11 @@ body{
     width: 200px;
     height: 200px;
 }
+
+.x{
+    background-color: red;
+}
+
+.o{
+    background-color: blue;
+}
