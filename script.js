@@ -7,10 +7,14 @@ const player = (name, type) => {
 
 const gameBoard = (() => {
 
-    let boardArray = ["x","x","x","o","x","o","x","o","x"];
+    let boardArray = ["","","","","","","","",""];
 
     const updateBoardArray = (type, id) => {
-        boardArray[id] = type;
+        if(boardArray[id] == ""){
+            boardArray[id] = type;
+        }else{
+            alert("That slot is take!");
+        };
     };
 
     const resetBoardArray = () => {
@@ -18,18 +22,32 @@ const gameBoard = (() => {
     };
 
     const checkForWin = () => {
-        
-        for(let i = 0; i <= 3; i++){
+        let win = false;
+
+        for(let i = 0; i <= 2; i++){
+            
+            let j = 0;
+            if(i == 1){
+                j = 3;
+            }else if(i == 2){
+                j = 6;
+            }
+
             if(boardArray[i] == boardArray[i+3] && boardArray[i] == boardArray[i+6] && boardArray[i] != ""){
-                return [true, boardArray[i]]
-            }else if(boardArray[i] == boardArray[i+1] && boardArray[i] == boardArray[i+2] && boardArray[i] != ""){
-                return [true, boardArray[i]]
-            }else if(i != 1 && boardArray[i] == boardArray[5] && boardArray[i] == boardArray[i+8] && boardArray[i] != ""){
-                return [true, boardArray[i]]
-            }else{
-                return false
+                win = [true, boardArray[i]];
             };
+            if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
+                win = [true, boardArray[i]];
+            };
+            if(i != 1 && boardArray[i] == boardArray[4] && boardArray[i] == boardArray[i+8] && boardArray[i] != ""){
+                win = [true, boardArray[i]];
+            };
+            if(i != 1 && boardArray[i] == boardArray[4] && boardArray[i] == boardArray[i+4] && boardArray[i] != ""){
+                win = [true, boardArray[i]];
+            }; 
         };
+
+        return win;
     };
 
     return({boardArray, updateBoardArray, resetBoardArray,checkForWin});
@@ -48,9 +66,8 @@ const displayScreen = (() =>{
             if(array[divCounter] == "x"){
                 element.classList.add('x');
 
-            }else{
+            }else if(array[divCounter] == "o"){
                 element.classList.add('o');
-                console.log(element);
             }
 
             divCounter++;
@@ -92,8 +109,13 @@ const formController = (() => {
     const playerBtn = document.querySelector("#selectAI");
     const typeBtn = document.querySelector("#selectType");
     const startBtn = document.querySelector('#start');
+    const grid = document.querySelectorAll('.block');
+    
+    let player1;
+    let player2;
     let playerStatus = "player";
     let typeStatus = "x";
+    let typeStatus2 = "o";
 
     playerBtn.addEventListener('click',() => {
         if(playerStatus == "player"){
@@ -108,16 +130,40 @@ const formController = (() => {
     typeBtn.addEventListener('click',() => {
         if(typeStatus == "x"){
             typeStatus = "o";
+            typeStatus2 = "x";
             typeBtn.textContent = "O";
         }else{
             typeStatus = "x";
+            typeStatus2 = "o";
             typeBtn.textContent = "X";
         };
     });
 
     startBtn.addEventListener('click', () => {
         displayScreen.start();
+        player1 = player("player", typeStatus);
+        player2 = player(playerStatus, typeStatus2);
     });
+
+    if(playerStatus == "player"){
+        let type = 'x';
+
+        grid.forEach(element => {
+            element.addEventListener('click', () => {
+                gameBoard.updateBoardArray(type,element.id);
+                displayScreen.writesquare(gameBoard.boardArray);
+                console.log(gameBoard.checkForWin());
+                console.log(gameBoard.boardArray);
+                if(type == "x"){
+                    type = "o";
+                }else{
+                    type = "x";
+                };
+            });
+        });
+    }else{
+
+    };
 
     return({playerStatus, typeStatus})
 
