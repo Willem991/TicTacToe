@@ -18,11 +18,11 @@ const gameBoard = (() => {
     };
 
     const resetBoardArray = () => {
-        boardArray = [];
+        boardArray = ["","","","","","","","",""];
     };
 
     const checkForWin = () => {
-        let win = false;
+        let win = [false];
 
         for(let i = 0; i <= 2; i++){
             
@@ -152,8 +152,7 @@ const formController = (() => {
             element.addEventListener('click', () => {
                 gameBoard.updateBoardArray(type,element.id);
                 displayScreen.writesquare(gameBoard.boardArray);
-                console.log(gameBoard.checkForWin());
-                console.log(gameBoard.boardArray);
+                console.log(gameBoard.checkForWin()[0])
                 if(type == "x"){
                     type = "o";
                 }else{
