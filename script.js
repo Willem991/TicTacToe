@@ -39,10 +39,10 @@ const gameBoard = (() => {
             if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
                 win = [true, boardArray[i]];
             };
-            if(i != 1 && boardArray[i] == boardArray[4] && boardArray[i] == boardArray[i+8] && boardArray[i] != ""){
-                win = [true, boardArray[i]];
+            if(boardArray[2] == boardArray[4] && boardArray[2] == boardArray[6] && boardArray[2] != ""){
+               win = [true, boardArray[i]];
             };
-            if(i != 1 && boardArray[i] == boardArray[4] && boardArray[i] == boardArray[i+4] && boardArray[i] != ""){
+            if(boardArray[0] == boardArray[4] && boardArray[0] == boardArray[8] && boardArray[0] != ""){
                 win = [true, boardArray[i]];
             }; 
         };
