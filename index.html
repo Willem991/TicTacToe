@@ -5,7 +5,17 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="gameBoard">
+        <div id="startPage" class="active">
+            <div id="character1">
+                <button id="selectType">X's</button>
+            </div>
+            <div id="character2">
+                <button id="selectAI">Player</button>
+            </div>
+                
+            <button id="start">Start</button>
+        </div>
+        <div id="gameBoard" class="inactive">
             <div class="block" id="0"></div>
             <div class="block" id="1"></div>
             <div class="block" id="2"></div>

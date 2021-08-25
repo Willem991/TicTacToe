@@ -5,8 +5,33 @@ body{
     justify-items: center;
 }
 
-#gameBoard{
+#startPage{
+
+    grid-template-columns: 350px 350px;
+    grid-template-rows: 500px 100px ;
+
+    align-items: center;
+    justify-items: center;
+
+    height: 600px;
+}
+
+#character1{
     display: grid;
+
+    width: 300px;
+    height: 400px;
+}
+
+#character2{
+    display: grid;
+
+    width: 300px;
+    height: 400px;
+}
+
+#gameBoard{
+
     grid-template-columns: repeat(3, 200px);
     grid-template-rows: repeat(3, 200px);
 
@@ -19,12 +44,24 @@ body{
 
     width: 200px;
     height: 200px;
+
+    border-style: solid;
 }
 
 .x{
-    background-color: red;
+    background-image: url("images/cross.png");
+    background-size: cover;
 }
 
 .o{
-    background-color: blue;
+    background-image: url("images/nought.png");
+    background-size: cover;
+}
+
+.active{
+    display: grid;
+}
+
+.inactive{
+    display: none;
 }
