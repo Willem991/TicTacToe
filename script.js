@@ -9,20 +9,21 @@ const gameBoard = (() => {
 
     let boardArray = ["","","","","","","","",""];
 
-    const updateBoardArray = (Array,type, id) => {
-        if(Array[id] == ""){
-            Array[id] = type;
+    const updateBoardArray = (Array1,type, id) => {
+        console.log(Array1);
+        if(Array1[id] == ""){
+            Array1[id] = type;
         }else{
             alert("That slot is take!");
         };
 
-        return Array;
+        return Array1;
     };
 
-    const resetBoardArray = (Array) => {
-        Array = ["","","","","","","","",""];
+    const resetBoardArray = (Array1) => {
+        Array1 = ["","","","","","","","",""];
         
-        return Array;
+        return Array1;
     };
 
     const checkForWin = (boardArray) => {
@@ -37,19 +38,43 @@ const gameBoard = (() => {
                 j = 6;
             }
 
+            if(boardArray[0] != "" && boardArray[1] != "" && boardArray[2] != "" && boardArray[3] != "" && boardArray[4] != "" && 
+            boardArray[5] != "" && boardArray[6] != "" && boardArray[7] != "" && boardArray[8] != ""){
+                
+                win = [true, "", "tie"];
+            };
+
             if(boardArray[i] == boardArray[i+3] && boardArray[i] == boardArray[i+6] && boardArray[i] != ""){
-                win = [true, boardArray[i]];
+                if(boardArray[i] = "x"){
+                    win = [true, boardArray[i], "win"];
+                }else{
+                    win = [true, boardArray[i], "win"];
+                };
             };
             if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
-                win = [true, boardArray[i]];
+                if(boardArray[i] = "x"){
+                    win = [true, boardArray[i], "win"];
+                }else{
+                    win = [true, boardArray[i], "win"];
+                };
             };
             if(boardArray[2] == boardArray[4] && boardArray[2] == boardArray[6] && boardArray[2] != ""){
-               win = [true, boardArray[i]];
+                if(boardArray[i] = "x"){
+                    win = [true, boardArray[i], "win"];
+                }else{
+                    win = [true, boardArray[i], "win"];
+                };
             };
             if(boardArray[0] == boardArray[4] && boardArray[0] == boardArray[8] && boardArray[0] != ""){
-                win = [true, boardArray[i]];
+                if(boardArray[i] = "x"){
+                    win = [true, boardArray[i], "win"];
+                }else{
+                    win = [true, boardArray[i], "win"];
+                };
             }; 
         };
+
+        
 
         return win;
     };
@@ -133,6 +158,7 @@ const formController = (() => {
     const menuBtn = document.querySelector('#mainMenu');
     const restartBtn = document.querySelector('#restart');
     
+    let depth = 0;
     let player1;
     let player2;
     let playerStatus = "player";
@@ -140,11 +166,11 @@ const formController = (() => {
     let typeStatus2 = "o";
 
     playerBtn.addEventListener('click',() => {
-        if(playerStatus == "player"){
-            playerStatus = "AI";
+        if(formController.playerStatus == "player"){
+            formController.playerStatus = "AI";
             playerBtn.textContent = "AI";
         }else{
-            playerStatus = "player";
+            formController.playerStatus = "player";
             playerBtn.textContent = "Player";
         };
     });
@@ -161,49 +187,97 @@ const formController = (() => {
         };
     });
 
-    startBtn.addEventListener('click', () => {
-        displayScreen.start();
-        player1 = player("player", typeStatus);
-        player2 = player(playerStatus, typeStatus2);
-    });
+    const btnIni = () => {
+        if(formController.playerStatus == "player"){
+            let type = 'x';
+            console.log("A");
 
-    menuBtn.addEventListener('click', () => {
-        gameBoard.boardArray =  gameBoard.resetBoardArray(gameBoard.boardArray);
-        displayScreen.reset();
-        displayScreen.clearScreen();
-    });
+            grid.forEach(element => {
+                element.onclick = () => {
+                    gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,type,element.id);
+                    displayScreen.writesquare(gameBoard.boardArray);
+                    
+                    if(type == "x"){
+                        type = "o";
+                    }else{
+                        type = "x";
+                    };
 
-    if(playerStatus == "player"){
-        let type = 'x';
-
-        grid.forEach(element => {
-            element.addEventListener('click', () => {
-                gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,type,element.id);
-                displayScreen.writesquare(gameBoard.boardArray);
-                console.log(gameBoard.boardArray);
-                
-                if(type == "x"){
-                    type = "o";
-                }else{
-                    type = "x";
+                    if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
+                        displayScreen.displayWinScreen();
+                        type = "x";
+                    }
                 };
-
-                if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
-                    displayScreen.displayWinScreen();
-                    type = "x";
-                }
             });
-        });
-    }else{
-
+        }else{ 
+            console.log("B");
+            if(typeStatus == "x"){
+                grid.forEach(element => {
+                    element.onclick = () => {
+                        gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
+                        depth++
+                        gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2));
+                        depth++
+                        displayScreen.writesquare(gameBoard.boardArray);
+                    };
+                });
+            };
+        };
     };
 
-    return({playerStatus, typeStatus})
+    const menuBtnCaller = () =>{
+        menuBtn.onclick = () => {
+            gameBoard.boardArray =  gameBoard.resetBoardArray(gameBoard.boardArray);
+            displayScreen.reset();
+            displayScreen.clearScreen();
+        };
+    };
+
+
+    const startBtnCaller = () => {
+        startBtn.addEventListener('click', () => {
+            displayScreen.start();
+            btnIni();
+            menuBtnCaller();
+            player1 = player("player", typeStatus);
+            player2 = player(playerStatus, typeStatus2);
+        });
+    };
+
+
+
+
+    return({playerStatus, typeStatus, btnIni, menuBtnCaller, startBtnCaller})
 
 })();
 
 
 const botAI = (() => {
 
+    
+
+    const minimax = (array, depth) => {
+        return 1;
+    }
+
+    const bestMove = (array1, type) => {
+        let bestscore = -Infinity;
+        let bestMoveval;
+
+        for(let i = 0; i <9; i++){
+           if(array1[i] == ""){
+            array1[i] = type;
+            let score = minimax(array1);
+
+            if(bestscore < score){
+                bestscore = score;
+                bestMoveval = i;
+            };
+           };
+        };
+        return(bestMoveval);
+    };
+return({bestMove});    
 })();
 
+formController.startBtnCaller();
