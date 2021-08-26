@@ -9,20 +9,23 @@ const gameBoard = (() => {
 
     let boardArray = ["","","","","","","","",""];
 
-    const updateBoardArray = (type, id) => {
-        if(boardArray[id] == ""){
-            gameBoard.boardArray[id] = type;
+    const updateBoardArray = (Array,type, id) => {
+        if(Array[id] == ""){
+            Array[id] = type;
         }else{
             alert("That slot is take!");
         };
+
+        return Array;
     };
 
-    const resetBoardArray = () => {
-        gameBoard.boardArray = ["","","","","","","","",""];
+    const resetBoardArray = (Array) => {
+        Array = ["","","","","","","","",""];
         
+        return Array;
     };
 
-    const checkForWin = () => {
+    const checkForWin = (boardArray) => {
         let win = [false];
 
         for(let i = 0; i <= 2; i++){
@@ -165,11 +168,9 @@ const formController = (() => {
     });
 
     menuBtn.addEventListener('click', () => {
-        gameBoard.resetBoardArray();
+        gameBoard.boardArray =  gameBoard.resetBoardArray(gameBoard.boardArray);
         displayScreen.reset();
-        console.log(gameBoard.boardArray);
-        displayScreen.writesquare(gameBoard.boardArray);
-        type = "x";
+        displayScreen.clearScreen();
     });
 
     if(playerStatus == "player"){
@@ -177,8 +178,9 @@ const formController = (() => {
 
         grid.forEach(element => {
             element.addEventListener('click', () => {
-                gameBoard.updateBoardArray(type,element.id);
+                gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,type,element.id);
                 displayScreen.writesquare(gameBoard.boardArray);
+                console.log(gameBoard.boardArray);
                 
                 if(type == "x"){
                     type = "o";
@@ -186,8 +188,9 @@ const formController = (() => {
                     type = "x";
                 };
 
-                if(gameBoard.checkForWin()[0]){
+                if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
                     displayScreen.displayWinScreen();
+                    type = "x";
                 }
             });
         });
