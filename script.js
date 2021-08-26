@@ -10,7 +10,7 @@ const gameBoard = (() => {
     let boardArray = ["","","","","","","","",""];
 
     const updateBoardArray = (Array1,type, id) => {
-        console.log(Array1);
+
         if(Array1[id] == ""){
             Array1[id] = type;
         }else{
@@ -27,54 +27,49 @@ const gameBoard = (() => {
     };
 
     const checkForWin = (boardArray) => {
-        let win = [false];
 
-        for(let i = 0; i <= 2; i++){
-            
-            let j = 0;
-            if(i == 1){
-                j = 3;
-            }else if(i == 2){
-                j = 6;
-            }
+        let win = [false, "", "no win"];
 
-            if(boardArray[0] != "" && boardArray[1] != "" && boardArray[2] != "" && boardArray[3] != "" && boardArray[4] != "" && 
-            boardArray[5] != "" && boardArray[6] != "" && boardArray[7] != "" && boardArray[8] != ""){
+        if(boardArray[0] != "" && boardArray[1] != "" && boardArray[2] != "" && boardArray[3] != "" && boardArray[4] != "" && boardArray[5] != "" && boardArray[6] != "" && boardArray[7] != "" && boardArray[8] != ""){
                 
-                win = [true, "", "tie"];
-            };
-
-            if(boardArray[i] == boardArray[i+3] && boardArray[i] == boardArray[i+6] && boardArray[i] != ""){
-                if(boardArray[i] = "x"){
-                    win = [true, boardArray[i], "win"];
-                }else{
-                    win = [true, boardArray[i], "win"];
-                };
-            };
-            if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
-                if(boardArray[i] = "x"){
-                    win = [true, boardArray[i], "win"];
-                }else{
-                    win = [true, boardArray[i], "win"];
-                };
-            };
-            if(boardArray[2] == boardArray[4] && boardArray[2] == boardArray[6] && boardArray[2] != ""){
-                if(boardArray[i] = "x"){
-                    win = [true, boardArray[i], "win"];
-                }else{
-                    win = [true, boardArray[i], "win"];
-                };
-            };
-            if(boardArray[0] == boardArray[4] && boardArray[0] == boardArray[8] && boardArray[0] != ""){
-                if(boardArray[i] = "x"){
-                    win = [true, boardArray[i], "win"];
-                }else{
-                    win = [true, boardArray[i], "win"];
-                };
-            }; 
+            win = [true, "", "tie"];
         };
 
-        
+        for(let i = 0; i <= 2; i++){
+
+            if(boardArray[i] == boardArray[i+3] && boardArray[i] == boardArray[i+6] && boardArray[i] != ""){
+                
+                win = [true, boardArray[i], "win"];
+
+            };
+        };
+
+        for(let j = 0; j<6; j=j+3 ){
+
+            if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
+                if(boardArray[j] == "x"){
+                    win = [true, boardArray[j], "win"];
+                }else{
+                    win = [true, boardArray[j], "win"];
+                };
+            };
+        };
+
+        if(boardArray[2] == boardArray[4] && boardArray[2] == boardArray[6] && boardArray[2] != ""){
+            if(boardArray[2] == "x"){
+                win = [true, boardArray[2], "win"];
+            }else{
+                win = [true, boardArray[2], "win"];
+            };
+        };
+
+        if(boardArray[0] == boardArray[4] && boardArray[0] == boardArray[8] && boardArray[0] != ""){
+            if(boardArray[0] == "x"){
+                win = [true, boardArray[0], "win"];
+            }else{
+                win = [true, boardArray[0], "win"];
+            };
+        }; 
 
         return win;
     };
@@ -190,7 +185,7 @@ const formController = (() => {
     const btnIni = () => {
         if(formController.playerStatus == "player"){
             let type = 'x';
-            console.log("A");
+
 
             grid.forEach(element => {
                 element.onclick = () => {
@@ -210,15 +205,17 @@ const formController = (() => {
                 };
             });
         }else{ 
-            console.log("B");
+
             if(typeStatus == "x"){
                 grid.forEach(element => {
                     element.onclick = () => {
                         gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
                         depth++
+
                         if(!gameBoard.checkForWin(gameBoard.boardArray)[0]){
-                        gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2));
-                        depth++
+
+                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, depth));
+                            depth++
                         };
                         displayScreen.writesquare(gameBoard.boardArray);
                     };
@@ -258,21 +255,40 @@ const botAI = (() => {
 
     
 
-    const minimax = (array1, depth) => {
-        return 1;
-    }
+    const minimax = (array1, depth, type) => {
 
-    const bestMove = (array1, type) => {
+        console.log(gameBoard.checkForWin(gameBoard.boardArray)[0]);
+        /*console.log(gameBoard.checkForWin(gameBoard.boardArray)[1]);
+        console.log(gameBoard.boardArray);
+
+        if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
+            if(type == gameBoard.checkForWin(gameBoard.boardArray)[1]){
+                return 10;
+            }else if(gameBoard.checkForWin(gameBoard.boardArray)[1] != ""){
+                return -10;
+            }else{
+                return 0;
+            };
+        }else{
+            return 1;
+        }*/
+
+        return 1;
+    };
+
+    const bestMove = (array1, type, depth) => {
         let bestscore = -Infinity;
         let bestMoveval;
+        console.log(type);
 
         for(let i = 0; i <9; i++){
            if(array1[i] == ""){
             array1[i] = type;
-            let score = minimax(array1);
+            let score = minimax(array1, depth, type);
             array1[i] = "";
             if(bestscore < score){
                 bestscore = score;
+                console.log(bestscore);
                 bestMoveval = i;
             };
            };
