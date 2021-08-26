@@ -11,14 +11,15 @@ const gameBoard = (() => {
 
     const updateBoardArray = (type, id) => {
         if(boardArray[id] == ""){
-            boardArray[id] = type;
+            gameBoard.boardArray[id] = type;
         }else{
             alert("That slot is take!");
         };
     };
 
     const resetBoardArray = () => {
-        boardArray = ["","","","","","","","",""];
+        gameBoard.boardArray = ["","","","","","","","",""];
+        
     };
 
     const checkForWin = () => {
@@ -96,13 +97,29 @@ const displayScreen = (() =>{
     }
 
     const reset = () =>{
+        const boardDisplay = document.querySelector('#gameBoard');
+        const characterScreen = document.querySelector('#startPage');
+        const winScreen = document.querySelector('#winPage');
+
         boardDisplay.classList.add("inactive");
         boardDisplay.classList.remove("active");
+
         characterScreen.classList.add("active");
         characterScreen.classList.remove("inactive");
+
+        winScreen.classList.add('inactive');
+        winScreen.classList.remove('active');
     }
 
-    return({writesquare, clearScreen, start, reset})
+    const displayWinScreen = () => {
+        const winScreen = document.querySelector('#winPage');
+
+        winScreen.classList.add('active');
+        winScreen.classList.remove('inactive');
+    } ;
+
+
+    return({writesquare, clearScreen, start, reset, displayWinScreen})
 })();
 
 const formController = (() => {
@@ -110,6 +127,8 @@ const formController = (() => {
     const typeBtn = document.querySelector("#selectType");
     const startBtn = document.querySelector('#start');
     const grid = document.querySelectorAll('.block');
+    const menuBtn = document.querySelector('#mainMenu');
+    const restartBtn = document.querySelector('#restart');
     
     let player1;
     let player2;
@@ -145,6 +164,14 @@ const formController = (() => {
         player2 = player(playerStatus, typeStatus2);
     });
 
+    menuBtn.addEventListener('click', () => {
+        gameBoard.resetBoardArray();
+        displayScreen.reset();
+        console.log(gameBoard.boardArray);
+        displayScreen.writesquare(gameBoard.boardArray);
+        type = "x";
+    });
+
     if(playerStatus == "player"){
         let type = 'x';
 
@@ -152,12 +179,16 @@ const formController = (() => {
             element.addEventListener('click', () => {
                 gameBoard.updateBoardArray(type,element.id);
                 displayScreen.writesquare(gameBoard.boardArray);
-                console.log(gameBoard.checkForWin()[0])
+                
                 if(type == "x"){
                     type = "o";
                 }else{
                     type = "x";
                 };
+
+                if(gameBoard.checkForWin()[0]){
+                    displayScreen.displayWinScreen();
+                }
             });
         });
     }else{
