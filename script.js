@@ -216,8 +216,10 @@ const formController = (() => {
                     element.onclick = () => {
                         gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
                         depth++
+                        if(!gameBoard.checkForWin(gameBoard.boardArray)[0]){
                         gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2));
                         depth++
+                        };
                         displayScreen.writesquare(gameBoard.boardArray);
                     };
                 });
@@ -256,7 +258,7 @@ const botAI = (() => {
 
     
 
-    const minimax = (array, depth) => {
+    const minimax = (array1, depth) => {
         return 1;
     }
 
@@ -268,7 +270,7 @@ const botAI = (() => {
            if(array1[i] == ""){
             array1[i] = type;
             let score = minimax(array1);
-
+            array1[i] = "";
             if(bestscore < score){
                 bestscore = score;
                 bestMoveval = i;
