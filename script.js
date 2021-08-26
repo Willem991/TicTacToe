@@ -38,37 +38,27 @@ const gameBoard = (() => {
         for(let i = 0; i <= 2; i++){
 
             if(boardArray[i] == boardArray[i+3] && boardArray[i] == boardArray[i+6] && boardArray[i] != ""){
-                
-                win = [true, boardArray[i], "win"];
 
+                win = [true, boardArray[i], "win"];
             };
         };
 
-        for(let j = 0; j<6; j=j+3 ){
+        for(let j = 0; j<8; j=j+3 ){
 
             if(boardArray[j] == boardArray[j+1] && boardArray[j] == boardArray[j+2] && boardArray[j] != ""){
-                if(boardArray[j] == "x"){
-                    win = [true, boardArray[j], "win"];
-                }else{
-                    win = [true, boardArray[j], "win"];
-                };
+
+                win = [true, boardArray[j], "win"];
             };
         };
 
         if(boardArray[2] == boardArray[4] && boardArray[2] == boardArray[6] && boardArray[2] != ""){
-            if(boardArray[2] == "x"){
-                win = [true, boardArray[2], "win"];
-            }else{
-                win = [true, boardArray[2], "win"];
-            };
+                
+            win = [true, boardArray[2], "win"];
         };
 
         if(boardArray[0] == boardArray[4] && boardArray[0] == boardArray[8] && boardArray[0] != ""){
-            if(boardArray[0] == "x"){
-                win = [true, boardArray[0], "win"];
-            }else{
-                win = [true, boardArray[0], "win"];
-            };
+
+            win = [true, boardArray[0], "win"];
         }; 
 
         return win;
@@ -153,7 +143,6 @@ const formController = (() => {
     const menuBtn = document.querySelector('#mainMenu');
     const restartBtn = document.querySelector('#restart');
     
-    let depth = 0;
     let player1;
     let player2;
     let playerStatus = "player";
@@ -210,12 +199,12 @@ const formController = (() => {
                 grid.forEach(element => {
                     element.onclick = () => {
                         gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
-                        depth++
+
 
                         if(!gameBoard.checkForWin(gameBoard.boardArray)[0]){
 
-                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, depth));
-                            depth++
+                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus));
+
                         };
                         displayScreen.writesquare(gameBoard.boardArray);
                     };
@@ -255,41 +244,79 @@ const botAI = (() => {
 
     
 
-    const minimax = (array1, depth, type) => {
+    const minimax = (array1, depth, type, othertype, constype) => {
 
-        console.log(gameBoard.checkForWin(gameBoard.boardArray)[0]);
-        /*console.log(gameBoard.checkForWin(gameBoard.boardArray)[1]);
-        console.log(gameBoard.boardArray);
-
-        if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
-            if(type == gameBoard.checkForWin(gameBoard.boardArray)[1]){
-                return 10;
-            }else if(gameBoard.checkForWin(gameBoard.boardArray)[1] != ""){
-                return -10;
-            }else{
+        if(gameBoard.checkForWin(array1)[0]){
+            if(type == gameBoard.checkForWin(array1)[1]){
+                console.log(array1);
+                console.log("o")
+                return 1;
+            }else if(gameBoard.checkForWin(array1)[1] == othertype){
+                console.log(array1);
+                console.log("x")
+                return -1;
+            }else if(gameBoard.checkForWin(array1)[2] == "tie"){
+                console.log(array1);
+                console.log("tie")
                 return 0;
             };
-        }else{
-            return 1;
-        }*/
+        };
 
-        return 1;
+        if(constype == type){
+            let bestscore = -Infinity;
+            constype = othertype;
+
+            for(let i = 0; i <9; i++){
+                if(array1[i] == ""){
+                    array1[i] = type;
+                    let score = minimax(array1, depth + 1, type,othertype, constype);
+                    array1[i] = "";
+
+                    bestscore = Math.max(score, bestscore);
+                };
+            };
+
+            return bestscore;
+
+        };
+        
+        if(constype == othertype){
+            let bestscore = Infinity;
+            constype = type;
+
+            for(let i = 0; i <9; i++){
+                if(array1[i] == ""){
+                    array1[i] = othertype;
+                    let score = minimax(array1, depth + 1, type, othertype, constype);
+                    array1[i] = "";
+
+                    bestscore =  Math.min(score, bestscore); 
+
+                };
+            };
+
+            return bestscore;
+        };
+
     };
 
-    const bestMove = (array1, type, depth) => {
+    const bestMove = (array1, type, type2) => {
         let bestscore = -Infinity;
         let bestMoveval;
-        console.log(type);
+        let constype = type2;
+        let depth = 0;
 
         for(let i = 0; i <9; i++){
            if(array1[i] == ""){
-            array1[i] = type;
-            let score = minimax(array1, depth, type);
-            array1[i] = "";
-            if(bestscore < score){
-                bestscore = score;
-                console.log(bestscore);
+                array1[i] = type;
+                let score = minimax(array1, depth, type, type2, constype);
+
+                array1[i] = "";
+                if(bestscore < score){
+                bestscore = Math.max(score, bestscore);
+
                 bestMoveval = i;
+
             };
            };
         };
