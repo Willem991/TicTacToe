@@ -5,10 +5,13 @@ const player = (name, type) => {
     return({name, type, turn});
 };
 
+//This controls the array which contains the noughts and crosses
 const gameBoard = (() => {
 
+    //The noughts and crosses array
     let boardArray = ["","","","","","","","",""];
 
+    //updates Array1 at position id with type 
     const updateBoardArray = (Array1,type, id) => {
 
         let checker =true;
@@ -24,12 +27,14 @@ const gameBoard = (() => {
         return [Array1,checker];
     };
 
+    //resets Array1 to an empty string array
     const resetBoardArray = (Array1) => {
         Array1 = ["","","","","","","","",""];
         
         return Array1;
     };
 
+    //checks if there are any noughts/crosses wins in boardArray
     const checkForWin = (boardArray) => {
 
         let win = [false, "", "no win"];
@@ -71,8 +76,10 @@ const gameBoard = (() => {
     return({boardArray, updateBoardArray, resetBoardArray,checkForWin});
 })();
 
+//This controls what is displayed on the screen
 const displayScreen = (() =>{
     
+    //this writes the noughts and crosses in array to a grid on screen
     const writesquare = (array) =>{
 
         let blocks = document.querySelectorAll(".block");
@@ -91,7 +98,7 @@ const displayScreen = (() =>{
             divCounter++;
         });
     };
-
+    //This clears the onscreen grid
     const clearScreen = () => {
 
         let blocks = document.querySelectorAll(".block");
@@ -101,7 +108,7 @@ const displayScreen = (() =>{
             element.classList.remove('x');
         });
     };
-
+    //This swaps which divs are displayed on screen from menu to game grid
     const start = () => {
         const boardDisplay = document.querySelector('#gameBoard');
         const characterScreen = document.querySelector('#startPage');
@@ -112,7 +119,7 @@ const displayScreen = (() =>{
         characterScreen.classList.remove("active");
 
     }
-
+    //This hides the agem grid and win screen and shows the menu again
     const reset = () =>{
         const boardDisplay = document.querySelector('#gameBoard');
         const characterScreen = document.querySelector('#startPage');
@@ -127,7 +134,7 @@ const displayScreen = (() =>{
         winScreen.classList.add('inactive');
         winScreen.classList.remove('active');
     }
-
+    //This displays the win screen
     const displayWinScreen = (winInfo) => {
         const winScreen = document.querySelector('#winPage');
         const winText = document.querySelector('#winText')
@@ -146,6 +153,7 @@ const displayScreen = (() =>{
     return({writesquare, clearScreen, start, reset, displayWinScreen})
 })();
 
+//This controls all the buttons
 const formController = (() => {
     const playerBtn = document.querySelector("#selectAI");
     const typeBtn = document.querySelector("#selectType");
@@ -160,6 +168,7 @@ const formController = (() => {
     let typeStatus = "x";
     let typeStatus2 = "o";
 
+    //Selects between human or AI
     playerBtn.addEventListener('click',() => {
         if(formController.playerStatus == "player"){
             formController.playerStatus = "AI";
@@ -170,6 +179,7 @@ const formController = (() => {
         };
     });
 
+    //Selects between noughts and crosses
     typeBtn.addEventListener('click',() => {
         if(typeStatus == "x"){
             typeStatus = "o";
@@ -182,6 +192,7 @@ const formController = (() => {
         };
     });
 
+    //A nightmare, should be in gameboard in hindstight, this controls AI placement
     const btnIni = () => {
         if(formController.playerStatus == "player"){
             let type = 'x';
@@ -259,6 +270,7 @@ const formController = (() => {
         };
     };
 
+    //Returns player to main menu
     const menuBtnCaller = () =>{
         menuBtn.onclick = () => {
             gameBoard.boardArray =  gameBoard.resetBoardArray(gameBoard.boardArray);
@@ -267,7 +279,7 @@ const formController = (() => {
         };
     };
 
-
+    //Starts a game
     const startBtnCaller = () => {
         startBtn.addEventListener('click', () => {
             displayScreen.start();
@@ -275,21 +287,27 @@ const formController = (() => {
             menuBtnCaller();
             player1 = player("player", typeStatus);
             player2 = player(playerStatus, typeStatus2);
+            console.log("hello")
         });
     };
 
-
-
-
+    //restarts the game with current settings
+    restartBtn.onclick = () => {
+        displayScreen.clearScreen();
+        displayScreen.reset();
+        gameBoard.boardArray = gameBoard.resetBoardArray(gameBoard.boardArray);
+        document.getElementById("start").click();
+    };
+ 
     return({playerStatus, typeStatus, btnIni, menuBtnCaller, startBtnCaller})
 
 })();
 
-
+//This contains the bot AI code
 const botAI = (() => {
 
     
-
+    //The minimax algorithm
     const minimax = (array1, depth, type, othertype, constype) => {
 
         if(gameBoard.checkForWin(array1)[0]){
@@ -343,6 +361,7 @@ const botAI = (() => {
 
     };
 
+    //This return the best move using the minimax algorithm, credit to The Coding Train for help here: https://www.youtube.com/watch?v=trKjYdBASyQ
     const bestMove = (array1, type, type2) => {
         let bestscore = -Infinity;
         let bestMoveval;
@@ -368,4 +387,5 @@ const botAI = (() => {
 return({bestMove});    
 })();
 
+//initializes the start button
 formController.startBtnCaller();
