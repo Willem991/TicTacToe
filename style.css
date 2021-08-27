@@ -1,6 +1,6 @@
 body{
     display: grid;
-    grid-template-rows: 200px, auto;
+    grid-template-rows: 200px auto;
     grid-template-columns: auto;
 
     align-items: center;
@@ -64,6 +64,19 @@ body{
 
     width: 300px;
     height: 400px;
+
+    background-image: radial-gradient(rgb(255, 255, 255), rgb(197, 197, 233), rgb(150, 150, 236));
+    
+    border-style: ridge;
+}
+
+#c1Text{
+    text-align: center;
+    font-size: 60px;
+    text-shadow: 5px 5px 5px white;
+    font-family: 'Allison', cursive;
+    margin-bottom: 0%;
+
 }
 
 #character2{
@@ -71,6 +84,19 @@ body{
 
     width: 300px;
     height: 400px;
+
+    background-image: radial-gradient(rgb(255, 255, 255), rgb(197, 197, 233), rgb(150, 150, 236));
+
+    border-style: ridge;
+}
+
+#c2Text{
+    text-align: center;
+    font-size: 60px;
+    text-shadow: 5px 5px 5px white;
+    font-family: 'Allison', cursive;
+    margin-bottom: 0%;
+
 }
 
 #gameBoard{
@@ -106,6 +132,81 @@ body{
     width: 300px;
     height: 400px;
     background-color: white;
+    padding-bottom: 10px;
+
+    border-radius: 10px;
+    border-style: solid;
+}
+
+#winText{
+    text-align: center;
+    font-size: 60px;
+    text-shadow: 5px 5px 5px white;
+    font-family: 'Allison', cursive;
+    
+}
+
+#selectType{
+    height: 100px ;
+    align-self: flex-end;
+    font-family: 'Rampart One', cursive;
+    font-size: 30px;
+    font-weight: bold;
+
+    background-color: white;
+    border-width: 5px;
+}
+
+#selectAI{
+    height: 100px;
+    align-self: flex-end;
+    font-family: 'Rampart One', cursive;
+    font-size: 30px;
+    font-weight: bold;
+
+    background-color: white;
+    border-width: 5px;
+}
+
+#restart{
+    height: 100px ;
+    width: 280px;
+    justify-self: center;
+    font-family: 'Rampart One', cursive;
+    font-size: 30px;
+    font-weight: bold;
+
+    background-color: white;
+    border-width: 5px;
+}
+
+#mainMenu{
+    height: 100px ;
+    width: 280px;
+    justify-self: center;
+    font-family: 'Rampart One', cursive;
+    font-size: 30px;
+    font-weight: bold;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+
+    background-color: white;
+    border-width: 5px;
+}
+
+#start{
+    width: 100px;
+    height: 30px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    font-family: 'Rampart One', cursive;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: white;
+
+
 }
 
 .block{
