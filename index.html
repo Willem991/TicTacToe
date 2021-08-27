@@ -3,36 +3,45 @@
         <title>Tic-Tac-Toe</title>
         <script src="script.js" defer></script>
         <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div id="startPage" class="active">
-            <div id="character1">
-                <button id="selectType">X's</button>
+        <div id="title"><h1>Tic-Tac-Toe!</h1></div>
+
+        <div id="background">
+            <div id="startPage" class="active">
+                <div id="character1">
+                    <button id="selectType">X's</button>
+                </div>
+                <div id="character2">
+                    <button id="selectAI">Player</button>
+                </div>
+                    
+                <button id="start">Start</button>
             </div>
-            <div id="character2">
-                <button id="selectAI">Player</button>
+
+            <div id="gameBoard" class="inactive">
+                <div class="block" id="0"></div>
+                <div class="block" id="1"></div>
+                <div class="block" id="2"></div>
+                <div class="block" id="3"></div>
+                <div class="block" id="4"></div>
+                <div class="block" id="5"></div>
+                <div class="block" id="6"></div>
+                <div class="block" id="7"></div>
+                <div class="block" id="8"></div>
             </div>
-                
-            <button id="start">Start</button>
-        </div>
-        <div id="gameBoard" class="inactive">
-            <div class="block" id="0"></div>
-            <div class="block" id="1"></div>
-            <div class="block" id="2"></div>
-            <div class="block" id="3"></div>
-            <div class="block" id="4"></div>
-            <div class="block" id="5"></div>
-            <div class="block" id="6"></div>
-            <div class="block" id="7"></div>
-            <div class="block" id="8"></div>
+
+            <div id="winPage" class="inactive">
+                <div id="winForm">
+                    <p id="winText"></p>
+                    <button id="restart" >restart</button>
+                    <button id="mainMenu">Main Menu</button>
+                </div>
+            </div>
         </div>
 
-        <div id="winPage" class="inactive">
-            <div id="winForm">
-                <p id="winText"></p>
-                <button id="restart" >restart</button>
-                <button id="mainMenu">Main Menu</button>
-            </div>
-        </div>
     </body>
 </html>
