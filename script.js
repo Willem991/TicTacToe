@@ -11,13 +11,17 @@ const gameBoard = (() => {
 
     const updateBoardArray = (Array1,type, id) => {
 
+        let checker =true;
         if(Array1[id] == ""){
             Array1[id] = type;
+            checker =true;
         }else{
             alert("That slot is take!");
+            checker =false;
+
         };
 
-        return Array1;
+        return [Array1,checker];
     };
 
     const resetBoardArray = (Array1) => {
@@ -178,7 +182,7 @@ const formController = (() => {
 
             grid.forEach(element => {
                 element.onclick = () => {
-                    gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,type,element.id);
+                    gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,type,element.id)[0];
                     displayScreen.writesquare(gameBoard.boardArray);
                     
                     if(type == "x"){
@@ -198,12 +202,15 @@ const formController = (() => {
             if(typeStatus == "x"){
                 grid.forEach(element => {
                     element.onclick = () => {
-                        gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
+                        
+                        let holder = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
+                        let checker  = holder[1];
+                        gameBoard.boardArray = holder[0];
 
 
-                        if(!gameBoard.checkForWin(gameBoard.boardArray)[0]){
+                        if(!gameBoard.checkForWin(gameBoard.boardArray)[0] && checker){
 
-                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus));
+                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus))[0];
 
                         };
                         displayScreen.writesquare(gameBoard.boardArray);
@@ -248,16 +255,13 @@ const botAI = (() => {
 
         if(gameBoard.checkForWin(array1)[0]){
             if(type == gameBoard.checkForWin(array1)[1]){
-                console.log(array1);
-                console.log("o")
+
                 return 1;
             }else if(gameBoard.checkForWin(array1)[1] == othertype){
-                console.log(array1);
-                console.log("x")
+
                 return -1;
             }else if(gameBoard.checkForWin(array1)[2] == "tie"){
-                console.log(array1);
-                console.log("tie")
+
                 return 0;
             };
         };
