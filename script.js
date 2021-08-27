@@ -128,8 +128,15 @@ const displayScreen = (() =>{
         winScreen.classList.remove('active');
     }
 
-    const displayWinScreen = () => {
+    const displayWinScreen = (winInfo) => {
         const winScreen = document.querySelector('#winPage');
+        const winText = document.querySelector('#winText')
+
+        if(winInfo[2] == 'tie'){
+        winText.textContent = `It's a tie!`
+        }else{
+            winText.textContent = `The winner is ${winInfo[1]}'s!`
+        };
 
         winScreen.classList.add('active');
         winScreen.classList.remove('inactive');
@@ -192,7 +199,7 @@ const formController = (() => {
                     };
 
                     if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
-                        displayScreen.displayWinScreen();
+                        displayScreen.displayWinScreen(gameBoard.checkForWin(gameBoard.boardArray));
                         type = "x";
                     }
                 };
@@ -207,13 +214,45 @@ const formController = (() => {
                         let checker  = holder[1];
                         gameBoard.boardArray = holder[0];
 
+                        if(!gameBoard.checkForWin(gameBoard.boardArray)[0] && checker){
+
+                            gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus))[0];
+
+                        };
+                       
+                        displayScreen.writesquare(gameBoard.boardArray);
+                        
+                        if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
+                            displayScreen.displayWinScreen(gameBoard.checkForWin(gameBoard.boardArray));
+
+                        };
+                    };
+                });
+            }else{
+
+                gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus))[0];
+                        
+                displayScreen.writesquare(gameBoard.boardArray);
+
+                grid.forEach(element => {
+                    element.onclick = () => {
+                        
+                        let holder = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus,element.id);
+                        let checker  = holder[1];
+                        gameBoard.boardArray = holder[0];
 
                         if(!gameBoard.checkForWin(gameBoard.boardArray)[0] && checker){
 
                             gameBoard.boardArray = gameBoard.updateBoardArray(gameBoard.boardArray,typeStatus2,botAI.bestMove(gameBoard.boardArray, typeStatus2, typeStatus))[0];
 
                         };
+                       
                         displayScreen.writesquare(gameBoard.boardArray);
+                        
+                        if(gameBoard.checkForWin(gameBoard.boardArray)[0]){
+                            displayScreen.displayWinScreen(gameBoard.checkForWin(gameBoard.boardArray));
+
+                        };
                     };
                 });
             };
